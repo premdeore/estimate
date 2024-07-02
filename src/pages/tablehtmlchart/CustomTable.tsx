@@ -67,10 +67,9 @@ const CustomTable: React.FC = () => {
   const handleSave = (sectionName: string, index: number) => {
     setEditableRow(null);
     setEditableUnitCostRow(null);
-    
     if (Object.prototype.hasOwnProperty.call(editedData, sectionName)) {
       const value = editedData[sectionName][index];
-    
+        
       data?.forEach((item) => {
         if (item.section_name === sectionName) {
           if (item?.items.length !== 0) {
@@ -94,6 +93,7 @@ const CustomTable: React.FC = () => {
         if (item.section_name === sectionName) {
           if (item?.items.length !== 0) {
             item?.items.forEach((ele, i) => {
+              
               if (i === index) {
                 ele.unit_cost = unitvalue.unit_cost
                 ele.total = (
@@ -204,10 +204,12 @@ const CustomTable: React.FC = () => {
               editableRow &&
               editableRow.section === section.section_name &&
               editableRow.index === index && editableRow.type === 'quantity';
+
               const isEditingunitcost =
               editableunitcostRow &&
               editableunitcostRow.section === section.section_name &&
-              editableunitcostRow.index === index && editableunitcostRow.type === 'unit_cost';  
+              editableunitcostRow.index === index && editableunitcostRow.type === 'unit_cost';
+
             const currentItemqty =
               editedData[section.section_name]?.[index] || item;
               
@@ -215,7 +217,7 @@ const CustomTable: React.FC = () => {
               unitcostData[section.section_name]?.[index] || item;  
             const inputKey = `${section.section_name}-${index}`;
             return (
-              <>
+              <React.Fragment key={index}>
                 <tr>
                   <td>{item.item_type_display_name}</td>
                   <td>{item.subject}</td>
@@ -223,6 +225,7 @@ const CustomTable: React.FC = () => {
                     {isEditingqty ? (
                       <input
                         type="text"
+                      
                         className="input-no-border"
                         ref={(el) => (inputRefs.current[inputKey] = el)}
                         value={currentItemqty.quantity}
@@ -241,7 +244,7 @@ const CustomTable: React.FC = () => {
                         }
                       />
                     ) : (
-                      item.quantity
+                      item.quantity !== '' ? item.quantity : 0
                     )}
                   </td>
                   <td onClick={() => handleEdit(section.section_name, index , 'unit_cost')}>
@@ -259,7 +262,6 @@ const CustomTable: React.FC = () => {
                     item.unit_cost
                   )}
                 </td> 
-                  {/* <td>{item.unit_cost}</td> */}
                   <td>{item.unit}</td>
                   <td>{item.total}</td>
                   <td>{item.tax_id}</td>
@@ -271,7 +273,7 @@ const CustomTable: React.FC = () => {
                     />
                   </td>
                 </tr>
-              </>
+              </React.Fragment>
             );
           })}
         </tbody>
@@ -286,9 +288,9 @@ const CustomTable: React.FC = () => {
       {data !== undefined &&
         data.map((ele: ISection) => {
           return (
-            <>
+            <React.Fragment key={ele.section_id}>
               {ele.items.length !== 0 && <table>{getBodyTableData(ele)}</table>}
-            </>
+            </React.Fragment>
           );
         })}
     </div>
